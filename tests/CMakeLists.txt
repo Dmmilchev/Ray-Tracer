@@ -9,10 +9,10 @@ FetchContent_Declare(
 FetchContent_MakeAvailable(catch2)
 
 # Build test binary
-add_executable(test_math test_math.cpp)
-target_link_libraries(test_math PRIVATE math Catch2::Catch2WithMain)
+add_executable(test_tuple test_tuple.cpp)
+target_link_libraries(test_tuple PRIVATE math Catch2::Catch2WithMain)
 
 # Add to ctest
 include(CTest)
 include(Catch)
-catch_discover_tests(test_math)
+catch_discover_tests(test_tuple)
