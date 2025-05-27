@@ -84,5 +84,80 @@ TEST_CASE("Tuple scalar multiplication work", "[tuple]") {
     REQUIRE(floatEqual(point2.x, 2));
     REQUIRE(floatEqual(point2.y, 4));
     REQUIRE(floatEqual(point2.z, 6));
+    REQUIRE(floatEqual(point2.w, 2));
 }
 
+TEST_CASE("Tuple scalar division work", "[tuple]") {
+    Tuple point1 = Tuple::point(1, 2, 3);
+    Tuple point2 = point1 / 2;
+
+    REQUIRE(floatEqual(point2.x, 0.5));
+    REQUIRE(floatEqual(point2.y, 1));
+    REQUIRE(floatEqual(point2.z, 1.5));
+    REQUIRE(floatEqual(point2.w, 0.5));
+}
+
+TEST_CASE("Tuple unary minus work", "[tuple]") {
+    Tuple a = Tuple::vector(-1, 2, -3);
+    Tuple b = -a;
+
+    REQUIRE(floatEqual(b.x, -a.x));
+    REQUIRE(floatEqual(b.y, -a.y));
+    REQUIRE(floatEqual(b.z, -a.z));
+    REQUIRE(!b.isPoint());
+}
+
+TEST_CASE("Tuple magnitude work", "[tuple]") {
+    REQUIRE(floatEqual(Tuple::vector(0, 3, 4).magnitude(), 5));
+    REQUIRE(floatEqual(Tuple::vector(1, 0, 0).magnitude(), 1));
+    REQUIRE(floatEqual(Tuple::vector(0, 1, 0).magnitude(), 1));
+    REQUIRE(floatEqual(Tuple::vector(0, 0, 1).magnitude(), 1));
+    REQUIRE(floatEqual(Tuple::vector(1, 2, 3).magnitude(), sqrt(14)));
+
+    REQUIRE_THROWS_AS(Tuple::point(1, 2, 3).magnitude(), std::logic_error);
+}
+
+TEST_CASE("Tuple equals work", "t") {
+    Tuple p1 = Tuple::point(1, 2, 3);
+    Tuple p2 = Tuple::point(1, 2, 3);
+    REQUIRE(p1 == p2);
+
+    Tuple v1 = Tuple::vector(1, 2, 3);
+    Tuple v2 = Tuple::vector(1, 2, 3);
+    REQUIRE(v1 == v2);
+}
+
+TEST_CASE("Vector normalize", "Tuple") {
+    Tuple v = Tuple::vector(1, 2, 3).normalize();
+    REQUIRE(floatEqual(v.x, 0.26726));
+    REQUIRE(floatEqual(v.y, 0.53452));
+    REQUIRE(floatEqual(v.z, 0.80178));
+
+    REQUIRE_THROWS_AS(Tuple::point(1, 2, 3).normalize(), std::logic_error);
+}
+
+TEST_CASE("Vector product", "Tuple") {
+    Tuple v1 = Tuple::vector(1, 2, 3);
+    Tuple v2 = Tuple::vector(0.5, 0.5, 0.5);
+    float d = dot(v1, v2);
+    REQUIRE(floatEqual(d, 3));
+
+    Tuple p = Tuple::point(1, 2, 3);
+    REQUIRE_THROWS_AS(dot(p, v1), std::logic_error);
+    REQUIRE_THROWS_AS(dot(v2, p), std::logic_error);
+}
+
+TEST_CASE("Vector cross product", "[Tuple]") {
+    Tuple a = Tuple::vector(1, 2, 3);
+    Tuple b = Tuple::vector(2, 3, 4);
+
+    Tuple c1 = cross(a, b);
+    REQUIRE(floatEqual(c1.x, -1));
+    REQUIRE(floatEqual(c1.y, 2));
+    REQUIRE(floatEqual(c1.z, -1));
+
+    Tuple c2 = cross(b, a);
+    REQUIRE(floatEqual(c2.x, 1));
+    REQUIRE(floatEqual(c2.y, -2));
+    REQUIRE(floatEqual(c2.z, 1));
+}

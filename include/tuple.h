@@ -13,10 +13,24 @@ public:
 
     bool isPoint() const;
 
-    Tuple operator * (float scalar);
+    Tuple operator * (float scalar) const;
+
+    Tuple operator / (float scalar) const;
+
+    Tuple operator - () const;
+
+    float magnitude() const;
+
+    Tuple normalize() const;
+
+    friend bool operator == (Tuple t1, Tuple t2);
 
     friend Tuple operator + (Tuple t1, Tuple t2);
 
     friend Tuple operator - (Tuple t1, Tuple t2);
+
+    friend float dot (Tuple t1, Tuple t2);
+
+    friend Tuple cross(Tuple t1, Tuple t2);
     
 };
